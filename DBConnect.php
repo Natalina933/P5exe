@@ -1,32 +1,35 @@
 <?php
-//API pour nous connecter à MySQL
-function dbConnect()
+
+/**
+ * Cette classe permet de se connecter à la base de données et de récupérer l'objet PDO
+ * Cette classe utilise le design pattern "Singleton".
+ */
+class DBConnect
 {
-    try {
-        $host = 'localhost';
-        $dbname = 'gest_contact'; 
-        $username = 'root';
-        $password = '';
+    private static $instance = null;
+    private $pdo;
 
-        // Création de l'objet PDO pour la connexion à la base de données
-        $pdo = new PDO(
-            'mysql:host=' . $host . ';dbname=' . $dbname . ';charset=utf8',
-            $username,
-            $password
-        );
+    private function __construct()
+    {
+        try {
+            $this->pdo = new PDO('mysql:host=localhost;dbname=gest_contact;charset=utf8', 'root', '');
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            echo 'Erreur de connexion : ' . $e->getMessage();
+            die();
+        }
+    }
 
-        // Définit l'attribut ERRMODE pour lever des exceptions en cas d'erreur
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    public static function getInstance(): DBConnect
+    {
+        if (self::$instance == null) {
+            self::$instance = new DBConnect();
+        }
+        return self::$instance;
+    }
 
-        // Retourne l'objet PDO
-        return $pdo;
-    } catch (PDOException $e) {
-        // Affiche un message d'erreur en cas de problème de connexion
-        echo 'Erreur de connexion : ' . $e->getMessage();
-        return null; // Retourne null en cas d'erreur
+    public function getPDO(): PDO
+    {
+        return $this->pdo;
     }
 }
-// Test de la fonction dbConnect
-$pdo = dbConnect();
-var_dump($pdo);
-?>

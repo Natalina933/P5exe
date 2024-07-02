@@ -1,7 +1,4 @@
 <?php
-require_once 'DBConnect.php';
-require_once 'ContactManager.php';
-
 class Command
 {
     private ContactManager $contactManager;
@@ -14,8 +11,14 @@ class Command
     public function list(): void
     {
         $contacts = $this->contactManager->findAll();
+        if (empty($contacts)) {
+            echo "Aucun contact\n";
+            return;
+        }
+        echo "Liste des contacts : \n";
+        echo "id, nom, email, telephone\n";
         foreach ($contacts as $contact) {
-            echo $contact->toString() . "\n";
+            echo $contact->toString();
         }
     }
 }
