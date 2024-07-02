@@ -1,5 +1,4 @@
 <?php
-include_once 'contact.php';
 class ContactManager
 {
     private PDO $bdd;
@@ -40,6 +39,32 @@ class ContactManager
         } catch (PDOException $e) {
             echo 'Erreur de requête SQL : ' . $e->getMessage();
             return null;
+        }
+    }
+
+    public function create(string $name, string $email, string $phone): bool
+    {
+        try {
+            $query = $this->bdd->prepare('INSERT INTO contact (contact_name, contact_email, contact_phone) VALUES (:name, :email, :phone)');
+            $query->bindValue(':name', $name, PDO::PARAM_STR);
+            $query->bindValue(':email', $email, PDO::PARAM_STR);
+            $query->bindValue(':phone', $phone, PDO::PARAM_STR);
+            return $query->execute();
+        } catch (PDOException $e) {
+            echo 'Erreur de requête SQL : ' . $e->getMessage();
+            return false;
+        }
+    }
+
+    public function delete(int $id): bool
+    {
+        try {
+            $query = $this->bdd->prepare('DELETE FROM contact WHERE contact_id = :id');
+            $query->bindValue(':id', $id, PDO::PARAM_INT);
+            return $query->execute();
+        } catch (PDOException $e) {
+            echo 'Erreur de requête SQL : ' . $e->getMessage();
+            return false;
         }
     }
 }
