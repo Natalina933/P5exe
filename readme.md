@@ -1,0 +1,1 @@
+Pour lancer votre programme en ligne de commande, écrivez dans un terminal `php main.php` .

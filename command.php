@@ -43,6 +43,14 @@ class Command
         }
     }
 
+    /**
+     * Creates a new contact with the given name, email, and phone number.
+     *
+     * @param string $name The name of the contact.
+     * @param string $email The email address of the contact.
+     * @param string $phone The phone number of the contact.
+     * @return void
+     */
     public function create(string $name, string $email, string $phone): void
     {
         $result = $this->contactManager->create($name, $email, $phone);
